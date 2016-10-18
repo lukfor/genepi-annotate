@@ -94,7 +94,7 @@ public class AnnotateTool extends Tool {
 			String mutation = reader.getString(mutationCol);
 
 			Iterator<Node<MapLocusItem>> result = maplocus.findByPosition(position);
-			
+
 			int offset = 0;
 			boolean exome = true;
 			String shorthand = "????????";
@@ -102,13 +102,13 @@ public class AnnotateTool extends Tool {
 				MapLocusItem item = result.next().getValue();
 				exome = item.getCoding().equals("coding");
 				shorthand = item.getShorthand();
-				if (!item.getReadingFrame().trim().isEmpty()){
-					offset =  Integer.parseInt(item.getReadingFrame().trim());
+				if (!item.getReadingFrame().trim().isEmpty()) {
+					offset = Integer.parseInt(item.getReadingFrame().trim()) - 1;
 				}
-			}else{
+			} else {
 				exome = false;
 			}
-			
+
 			if (exome) {
 
 				// get ref tripel
@@ -128,7 +128,7 @@ public class AnnotateTool extends Tool {
 				}
 
 			} else {
-				//no region found in maplocus file
+				// no region found in maplocus file
 				writer.setString(columnWd, "-");
 				writer.setString(columnMut, "-");
 				writer.setString("mylocus", shorthand);
@@ -147,9 +147,10 @@ public class AnnotateTool extends Tool {
 
 	public static void main(String[] args) {
 
-		AnnotateTool stat = new AnnotateTool(new String[] { "--input", "test-input.txt", "--reference", "kiv2_6.fasta",
-				"--position", "POS", "--mutation", "MINOR-BASE-FWD", "--maplocus", "MapLocusLPA (FOR LONG PCR) - v3.txt", "--output", "text-output.txt",
-				"--columnwt", "wt aas", "--columnmut", "mut aas" });
+		AnnotateTool stat = new AnnotateTool(
+				new String[] { "--input", "test-input.txt", "--reference", "kiv2_6.fasta", "--position", "POS",
+						"--mutation", "MINOR-BASE-FWD", "--maplocus", "MapLocusLPA (FOR LONG PCR) - v3.txt", "--output",
+						"text-output.txt", "--columnwt", "wt aas", "--columnmut", "mut aas" });
 		stat.start();
 
 	}
