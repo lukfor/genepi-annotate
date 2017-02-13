@@ -103,7 +103,7 @@ public class AnnotateTool extends Tool {
 				exome = item.getCoding().equals("coding");
 				shorthand = item.getShorthand();
 				if (!item.getReadingFrame().trim().isEmpty()) {
-					offset = Integer.parseInt(item.getReadingFrame().trim()) - 1;
+					offset = Integer.parseInt(item.getReadingFrame().trim());
 				}
 			} else {
 				exome = false;
