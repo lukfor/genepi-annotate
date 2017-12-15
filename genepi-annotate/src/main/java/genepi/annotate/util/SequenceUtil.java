@@ -1,5 +1,8 @@
 package genepi.annotate.util;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,8 +45,9 @@ public class SequenceUtil {
 	}
 
 	public static Map<String, String> loadCodonTable(String filename) {
+		InputStream cpResource = SequenceUtil.class.getClassLoader().getResourceAsStream(filename);
 		HashMap<String, String> codonTable = new HashMap<String, String>();
-		CsvTableReader reader = new CsvTableReader(filename, '\t');
+		CsvTableReader reader = new CsvTableReader(new DataInputStream(cpResource), '\t');
 		while (reader.next()) {
 			String aminoAcid = reader.getString("Amino acid");
 			String[] codons = reader.getString("Codons").split(",");
@@ -52,6 +56,7 @@ public class SequenceUtil {
 			}
 		}
 		reader.close();
+
 		return codonTable;
 	}
 
