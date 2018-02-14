@@ -98,8 +98,9 @@ public class AnnotateTool extends Tool {
 			int offset = 0;
 			boolean exome = true;
 			String shorthand = "????????";
+			MapLocusItem item = null;
 			if (result.hasNext()) {
-				MapLocusItem item = result.next().getValue();
+				item = result.next().getValue();
 				exome = item.getCoding().equals("coding");
 				shorthand = item.getShorthand();
 				if (!item.getReadingFrame().trim().isEmpty()) {
@@ -112,10 +113,11 @@ public class AnnotateTool extends Tool {
 			if (exome) {
 
 				// get ref tripel
-				String tripelRef = SequenceUtil.getTripel(refSequence, offset, position);
+				String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset - 1, position);
 				if (!tripelRef.equals("-")) {
 					// get changed tripel
-					String tripelMutation = SequenceUtil.getTripelWithMutation(refSequence, offset, position, mutation);
+					String tripelMutation = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() - 1,
+							offset - 1, position, mutation);
 
 					// write aas to outputfile
 					writer.setString(columnWd, codonTable.get(tripelRef));

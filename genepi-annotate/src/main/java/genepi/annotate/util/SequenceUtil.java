@@ -1,7 +1,6 @@
 package genepi.annotate.util;
 
 import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,21 +25,36 @@ public class SequenceUtil {
 		return reader.get();
 	}
 
-	public static String getTripel(String refSequence, int offset, int position) {
-		if (position < offset) {
+	public static String getTripel(String refSequence, int startExon, int offset, int position) {
+
+		int firstBase = startExon + offset;
+		if (position < firstBase) {
 			return "-";
 		}
-		int start = position - ((position - offset) % 3);
+
+		int difference = position - firstBase;
+		int relativeOffset = difference % 3;
+		int start = position - relativeOffset;
 		if (start + 3 >= refSequence.length()) {
 			return "-";
 		}
+
 		return refSequence.substring(start, start + 3);
 	}
 
-	public static String getTripelWithMutation(String refSequence, int offset, int position, String variant) {
-		int index = (position - offset) % 3;
-		StringBuilder temp = new StringBuilder(getTripel(refSequence, offset, position));
-		temp.setCharAt(index, variant.charAt(0));
+	public static String getTripelWithMutation(String refSequence, int startExon, int offset, int position,
+			String variant) {
+
+		int firstBase = startExon + offset;
+		if (position < firstBase) {
+			return "-";
+		}
+
+		int difference = position - firstBase;
+		int relativeOffset = difference % 3;
+
+		StringBuilder temp = new StringBuilder(getTripel(refSequence, startExon, offset, position));
+		temp.setCharAt(relativeOffset, variant.charAt(0));
 		return temp.toString();
 	}
 
