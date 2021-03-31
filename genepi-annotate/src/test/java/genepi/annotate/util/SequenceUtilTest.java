@@ -129,5 +129,16 @@ public class SequenceUtilTest extends TestCase {
 		assertEquals("Met", codonTable.get("ATG"));
 
 	}
+	
+	public void testLoadCodonTableLong() {
+		Map<String, String> codonTable = SequenceUtil.loadCodonTableLong("test-data/SARSCOV2.aac.txt");
+
+		assertEquals("A", codonTable.get("GCT"));
+		assertEquals("A", codonTable.get("GCG"));
+		assertEquals("D", codonTable.get("GAC"));
+		assertEquals("*", codonTable.get("TAG"));
+		assertEquals("M", codonTable.get("ATG"));
+
+	}
 
 }

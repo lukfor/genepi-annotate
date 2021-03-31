@@ -1,6 +1,8 @@
 package genepi.annotate.util;
 
 import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +73,25 @@ public class SequenceUtil {
 		}
 		reader.close();
 
+		return codonTable;
+	}
+	
+	public static Map<String, String> loadCodonTableLong(String filename) {
+		FileInputStream file;
+		HashMap<String, String> codonTable = new HashMap<String, String>();
+		try {
+			file = new FileInputStream(filename);
+		CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
+		while (reader.next()) {
+			String aminoAcid = reader.getString("Letter");
+			String codons = reader.getString("Codons");
+			codonTable.put(codons.trim(), aminoAcid);
+		}
+		reader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return codonTable;
 	}
 
