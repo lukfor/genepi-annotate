@@ -1,8 +1,10 @@
 package genepi.annotate.util;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,19 +14,28 @@ import genepi.io.text.LineReader;
 
 public class SequenceUtil {
 	public static String readReferenceSequence(String filename) throws Exception {
-		LineReader reader = new LineReader(filename);
-		if (!reader.next()) {
-			throw new Exception("Empty file.");
-		}
-		String name = reader.get();
-		if (!name.startsWith(">")) {
-			throw new Exception("Not valid fasta file. Missing name in line 1.");
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String line = reader.readLine();
+		StringBuffer reference = new StringBuffer();
 
+		if (!line.contains(">"))
+			throw new Exception("Not a valid fasta file. Missing name in line 1.");
+		
+		line= reader.readLine(); //read next line under sample name 
+		
+		if (line==null)
+			throw new Exception("Empty file");
+		
+		while (line != null) {
+			if (line.contains(">")) {
+				throw new Exception("Mutlifasta file not allowed as reference.");
+			} else {
+				reference.append(line);
+				line = reader.readLine();
+			}
 		}
-		if (!reader.next()) {
-			throw new Exception("File too short. No second line.");
-		}
-		return reader.get();
+		reader.close();
+		return reference.toString();
 	}
 
 	public static String getTripel(String refSequence, int startExon, int offset, int position) {
@@ -55,7 +66,9 @@ public class SequenceUtil {
 		int difference = position - firstBase;
 		int relativeOffset = difference % 3;
 
+		System.out.println("VARIANT " + variant + "  " + relativeOffset + " " + startExon + " " + position);
 		StringBuilder temp = new StringBuilder(getTripel(refSequence, startExon, offset, position));
+		System.out.println(temp);
 		temp.setCharAt(relativeOffset, variant.charAt(0));
 		return temp.toString();
 	}
@@ -75,19 +88,19 @@ public class SequenceUtil {
 
 		return codonTable;
 	}
-	
+
 	public static Map<String, String> loadCodonTableLong(String filename) {
 		FileInputStream file;
 		HashMap<String, String> codonTable = new HashMap<String, String>();
 		try {
 			file = new FileInputStream(filename);
-		CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
-		while (reader.next()) {
-			String aminoAcid = reader.getString("Letter");
-			String codons = reader.getString("Codons");
-			codonTable.put(codons.trim(), aminoAcid);
-		}
-		reader.close();
+			CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
+			while (reader.next()) {
+				String aminoAcid = reader.getString("Letter");
+				String codons = reader.getString("Codons");
+				codonTable.put(codons.trim(), aminoAcid);
+			}
+			reader.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -42,7 +42,7 @@ public class MapLocusGFF3 {
 						String phase = st.nextToken(); // 8. Phase
 						StringTokenizer st2 = new StringTokenizer(st.nextToken(), ";");
 						String id = st2.nextToken().split("=")[1];
-						String name = st2.nextToken().split("=")[1];
+						String name = st2.nextToken().split("gene-")[1];
 						System.out.println(start + "  " + end + " " + id + " " + name + " " + phase);
 
 						MapLocusItem mapLocusItem = new MapLocusItem();

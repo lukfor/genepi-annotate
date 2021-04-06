@@ -132,12 +132,28 @@ public class SequenceUtilTest extends TestCase {
 	
 	public void testLoadCodonTableLong() {
 		Map<String, String> codonTable = SequenceUtil.loadCodonTableLong("test-data/SARSCOV2.aac.txt");
-
 		assertEquals("A", codonTable.get("GCT"));
 		assertEquals("A", codonTable.get("GCG"));
 		assertEquals("D", codonTable.get("GAC"));
 		assertEquals("*", codonTable.get("TAG"));
 		assertEquals("M", codonTable.get("ATG"));
+
+	}
+	
+	public void testgetTripleReference() {
+		
+
+		String reference = "test-data/SARSCOV2.fasta";
+
+		try {
+			String refSequence = SequenceUtil.readReferenceSequence(reference);
+			System.out.println(refSequence.length());
+			assertEquals("AAT", SequenceUtil.getTripel(refSequence, 21563, -1, 23063));
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

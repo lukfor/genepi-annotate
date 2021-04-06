@@ -43,7 +43,7 @@ public class MapLocusTest extends TestCase {
 		}
 		assertEquals(13, foundIntervals);
 
-		// find first 3 intervaös
+		// find first 3 intervals
 		results = mapLocus.findByRange(1, 580);
 		foundIntervals = 0;
 		while (results.hasNext()) {
