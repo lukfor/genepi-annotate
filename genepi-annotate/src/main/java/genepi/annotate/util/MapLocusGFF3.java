@@ -43,13 +43,11 @@ public class MapLocusGFF3 {
 						StringTokenizer st2 = new StringTokenizer(st.nextToken(), ";");
 						String id = st2.nextToken().split("=")[1];
 						String name = st2.nextToken().split("gene-")[1];
-						System.out.println(start + "  " + end + " " + id + " " + name + " " + phase);
-
 						MapLocusItem mapLocusItem = new MapLocusItem();
 						mapLocusItem.setShorthand(name);
 						mapLocusItem.setDescription(name);
 						mapLocusItem.setCoding("coding");
-						mapLocusItem.setTranslated(strand == "+" ? "F" : "R");
+						mapLocusItem.setTranslated(strand.equals("+") ? "F" : "R");
 						mapLocusItem.setReadingFrame(phase);
 						mapLocusItem.setStart(start);
 						mapLocusItem.setStop(end);
