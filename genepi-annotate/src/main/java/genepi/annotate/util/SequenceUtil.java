@@ -41,7 +41,7 @@ public class SequenceUtil {
 		return reference.toString();
 	}
 
-	// TODO Adapt FOR STRAND ORIENTATION
+	// getTriple on FORWARD strand +
 	public static String getTripel(String refSequence, int startExon, int offset, int position) {
 
 		int firstBase = startExon + offset;
@@ -56,11 +56,10 @@ public class SequenceUtil {
 		if (start + 3 >= refSequence.length()) {
 			return "-";
 		}
-		return refSequence.substring(start , start + 3);
+		return refSequence.substring(start, start + 3);
 
 	}
 
-	// TODO Adapt FOR STRAND ORIENTATION
 	public static String getTripelWithMutation(String refSequence, int startExon, int offset, int position,
 			String variant) {
 
@@ -75,6 +74,58 @@ public class SequenceUtil {
 		StringBuilder temp = new StringBuilder(getTripel(refSequence, startExon, offset, position));
 		temp.setCharAt(relativeOffset, variant.charAt(0));
 		return temp.toString();
+	}
+
+	public static String getTripelRev(String refSequence, int stopExon, int offset, int position) {
+
+		int lastBase = stopExon - offset;
+		if (position > lastBase) {
+			return "-";
+		}
+		int difference = lastBase - position;
+		int relativeOffset = difference % 3;
+		int end = position + relativeOffset;
+		if (end >= refSequence.length()) {
+			return "-";
+		}
+		return getReverseComplement(refSequence.substring(end - 3, end));
+	}
+
+	public static String getTripelWithMutationRev(String refSequence, int stopExon, int offset, int position,
+			String variant) {
+
+		int lastBase = stopExon - offset;
+		if (position > lastBase) {
+			return "-";
+		}
+		int difference = lastBase - position;
+		int relativeOffset = difference % 3;
+
+		StringBuilder temp = new StringBuilder(getTripelRev(refSequence, stopExon, offset, position));
+		temp.setCharAt(relativeOffset, getReverseComplement(variant).charAt(0));
+		return temp.toString();
+
+	}
+
+	private static String getReverseComplement(String forwardTriple) {
+		String result = "";
+		for (int i = forwardTriple.length() - 1; i >= 0; i--) {
+			switch (forwardTriple.charAt(i)) {
+			case 'A':
+				result += "T";
+				break;
+			case 'C':
+				result += "G";
+				break;
+			case 'G':
+				result += "C";
+				break;
+			case 'T':
+				result += "A";
+				break;
+			}
+		}
+		return result;
 	}
 
 	public static Map<String, String> loadCodonTable(String filename) {
@@ -120,4 +171,45 @@ public class SequenceUtil {
 			return 0;
 	}
 
+	public static String getTripelZeroBased(String refSequence, int start, int offset, int position) {
+		return getTripel(refSequence, start - 1, offset, position - 1);
+	}
+
+	public static String getTripelWithMutationZeroBased(String refSequence, int startExon, int offset, int position,
+			String variant) {
+		return getTripelWithMutation(refSequence, startExon - 1, offset, position - 1, variant);
+	}
+
+	public static String getAAC(String refSequence, Map<String, String> codonTable, MapLocusItem item, int position,
+			String variant) {
+
+		if (item != null) {
+
+			int offset = Integer.parseInt(item.getReadingFrame().trim());
+			String tripelRef = "";
+			String tripelMut = "";
+
+			// FORWAD STRAND - Zerobased adapting
+			if (item.getTranslated().equals("F")) {
+				tripelRef = SequenceUtil.getTripelZeroBased(refSequence, item.getStart(), offset, position);
+				tripelMut = SequenceUtil.getTripelWithMutationZeroBased(refSequence, item.getStart(), offset, position,
+						variant);
+			}
+			// REVERSE STRAND
+			else {
+				tripelRef = SequenceUtil.getTripelRev(refSequence, item.getStop(), offset, position);
+				tripelMut = SequenceUtil.getTripelWithMutationRev(refSequence, item.getStop(), offset, position,
+						variant);
+			}
+
+			int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
+
+			String codonRef = codonTable.get(tripelRef);
+			String codonMut = codonTable.get(tripelMut);
+			if (!codonRef.equals(codonMut))
+				return (codonRef + posAAC + codonMut);
+		}
+		return "";
+
+	}
 }

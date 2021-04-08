@@ -118,7 +118,10 @@ public class AnnotateToolTest extends TestCase {
 		int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
 		assertEquals("N501Y", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
-
+		
+		String aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
+		assertEquals("N501Y",aac);
+		
 		// 23064C
 		position++;
 
@@ -181,36 +184,54 @@ public class AnnotateToolTest extends TestCase {
 		assertEquals(0, offset);
 
 		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() -1 , offset, position -1);
+		String tripelRef0 = SequenceUtil.getTripelZeroBased(refSequence, item.getStart() , offset, position );
+		assertEquals(tripelRef, tripelRef0);
+		
 		String tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() -1 , offset, position -1, variant);
 		int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
 		assertEquals("L499M", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
+		
+		String aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
+		assertEquals("L499M", aac);
 
 		// 14225T in ND6 -> Reverse strand
-		position = 14225;
+		
+		position = 14225; //first position reverse
 		variant = "T";
-
 		result = maplocus.findByPosition(position);
-
 		assertTrue(result.hasNext());
-
 		item = result.next().getValue();
-
-		System.out.println(item.getShorthand() + " " + item.getStart() + " " + item.getTranslated());
-
 		offset = Integer.parseInt(item.getReadingFrame().trim());
-
 		assertEquals(0, offset);
 
-		tripelRef = SequenceUtil.getTripel(refSequence, item.getStart(), offset, position);
-		tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart(), offset, position, variant);
+		tripelRef = SequenceUtil.getTripelRev(refSequence, item.getStop(), offset, position);
+		tripelMut = SequenceUtil.getTripelWithMutationRev(refSequence, item.getStop(), offset, position, variant);
 		posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
-		assertEquals(150, posAAC);
-		// TODO ADAPT FOR STRAND check
-		// assertEquals("R150H", codonTable.get(tripelRef) + posAAC +
-		// codonTable.get(tripelMut));
+		assertEquals("R150H", codonTable.get(tripelRef) + posAAC +	 codonTable.get(tripelMut));
 
+		position=14673;
+		variant="G";
+		result = maplocus.findByPosition(position);
+		item = result.next().getValue();		
+		aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
+		assertEquals("M1L", aac);
+
+		position=14668; //not an AAC
+		variant="T";
+		result = maplocus.findByPosition(position);
+		item = result.next().getValue();		
+		aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
+		assertEquals("", aac);
+		
+		position=14668;
+		variant="G";
+		result = maplocus.findByPosition(position);
+		item = result.next().getValue();		
+		aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
+		assertEquals("M2I", aac);
+		
 	}
 
 	/**
