@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import genepi.io.table.reader.CsvTableReader;
-import genepi.io.text.LineReader;
 
 public class SequenceUtil {
 	public static String readReferenceSequence(String filename) throws Exception {
@@ -18,16 +17,20 @@ public class SequenceUtil {
 		String line = reader.readLine();
 		StringBuffer reference = new StringBuffer();
 
-		if (!line.contains(">"))
+		if (!line.contains(">")) {
+			reader.close();
 			throw new Exception("Not a valid fasta file. Missing name in line 1.");
-		
-		line= reader.readLine(); //read next line under sample name 
-		
-		if (line==null)
+		}
+
+		line = reader.readLine(); // read next line under sample name
+
+		if (line == null) {
+			reader.close();
 			throw new Exception("Empty file");
-		
+		}
 		while (line != null) {
 			if (line.contains(">")) {
+				reader.close();
 				throw new Exception("Mutlifasta file not allowed as reference.");
 			} else {
 				reference.append(line);
@@ -38,6 +41,7 @@ public class SequenceUtil {
 		return reference.toString();
 	}
 
+	// TODO Adapt FOR STRAND ORIENTATION
 	public static String getTripel(String refSequence, int startExon, int offset, int position) {
 
 		int firstBase = startExon + offset;
@@ -47,14 +51,16 @@ public class SequenceUtil {
 
 		int difference = position - firstBase;
 		int relativeOffset = difference % 3;
+
 		int start = position - relativeOffset;
 		if (start + 3 >= refSequence.length()) {
 			return "-";
 		}
+		return refSequence.substring(start , start + 3);
 
-		return refSequence.substring(start, start + 3);
 	}
 
+	// TODO Adapt FOR STRAND ORIENTATION
 	public static String getTripelWithMutation(String refSequence, int startExon, int offset, int position,
 			String variant) {
 
@@ -66,9 +72,7 @@ public class SequenceUtil {
 		int difference = position - firstBase;
 		int relativeOffset = difference % 3;
 
-		System.out.println("VARIANT " + variant + "  " + relativeOffset + " " + startExon + " " + position);
 		StringBuilder temp = new StringBuilder(getTripel(refSequence, startExon, offset, position));
-		System.out.println(temp);
 		temp.setCharAt(relativeOffset, variant.charAt(0));
 		return temp.toString();
 	}
@@ -85,7 +89,6 @@ public class SequenceUtil {
 			}
 		}
 		reader.close();
-
 		return codonTable;
 	}
 
@@ -97,7 +100,7 @@ public class SequenceUtil {
 			CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
 			while (reader.next()) {
 				String aminoAcid = reader.getString("Letter");
-				String codons = reader.getString("Codons");
+				String codons = reader.getString("Codon");
 				codonTable.put(codons.trim(), aminoAcid);
 			}
 			reader.close();
@@ -106,6 +109,15 @@ public class SequenceUtil {
 			e.printStackTrace();
 		}
 		return codonTable;
+	}
+
+	public static int getPosition(int start, int stop, int position, String direction) {
+		if (direction.equals("F"))
+			return ((position - start) / 3 + 1);
+		else if (direction.equals("R"))
+			return ((stop - position) / 3 + 1);
+		else
+			return 0;
 	}
 
 }

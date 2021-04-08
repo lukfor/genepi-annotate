@@ -148,7 +148,7 @@ public class SequenceUtilTest extends TestCase {
 		try {
 			String refSequence = SequenceUtil.readReferenceSequence(reference);
 			System.out.println(refSequence.length());
-			assertEquals("AAT", SequenceUtil.getTripel(refSequence, 21563, -1, 23063));
+			assertEquals("AAT", SequenceUtil.getTripel(refSequence, 21563-1, 0, 23063-1));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
