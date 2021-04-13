@@ -112,7 +112,7 @@ public class SequenceUtilTest extends TestCase {
 		assertEquals("Met", codonTable.get("ATG"));
 
 	}
-	
+
 	public void testLoadCodonTableLong() throws FileNotFoundException {
 		Map<String, String> codonTable = SequenceUtil.loadCodonTableLong("test-data/SARSCOV2.aac.txt");
 		assertEquals("A", codonTable.get("GCT"));
@@ -122,20 +122,14 @@ public class SequenceUtilTest extends TestCase {
 		assertEquals("M", codonTable.get("ATG"));
 
 	}
-	
-	public void testgetTripleReference() {
-		
+
+	public void testgetTripleReference() throws Exception {
+
 		String reference = "test-data/SARSCOV2.fasta";
 
-		try {
-			String refSequence = SequenceUtil.readReferenceSequence(reference);
-			System.out.println(refSequence.length());
-			assertEquals("AAT", SequenceUtil.getTripelZeroBased(refSequence, 21563, 0, 23063));
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String refSequence = SequenceUtil.readReferenceSequence(reference);
+		System.out.println(refSequence.length());
+		assertEquals("AAT", SequenceUtil.getTripelZeroBased(refSequence, 21563, 0, 23063));
 
 	}
 
