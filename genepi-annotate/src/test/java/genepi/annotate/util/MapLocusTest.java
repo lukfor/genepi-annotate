@@ -31,7 +31,7 @@ public class MapLocusTest extends TestCase {
 
 	public void testLoadFromFile() throws IOException {
 
-		String filename = "MapLocusLPA (FOR LONG PCR) - v3.txt";
+		String filename = "test-data/MapLocusLPA (FOR LONG PCR) - v3.txt";
 
 		MapLocus mapLocus = new MapLocus(filename);
 

@@ -30,8 +30,8 @@ public class AnnotateToolTest extends TestCase {
 		int position = 621;
 		position = position - 1;
 
-		String maplocusFilename = "MapLocusLPA (FOR LONG PCR) - v3.txt";
-		String reference = "kiv2_6.fasta";
+		String maplocusFilename = "test-data/MapLocusLPA (FOR LONG PCR) - v3.txt";
+		String reference = "test-data/kiv2_6.fasta";
 		String codonTableFilename = "codon_table.csv";
 
 		Map<String, String> codonTable = SequenceUtil.loadCodonTable(codonTableFilename);
@@ -59,8 +59,8 @@ public class AnnotateToolTest extends TestCase {
 		int position = 4912;
 		position = position - 1;
 
-		String maplocusFilename = "MapLocusLPA (FOR LONG PCR) - v3.txt";
-		String reference = "kiv2_6.fasta";
+		String maplocusFilename = "test-data/MapLocusLPA (FOR LONG PCR) - v3.txt";
+		String reference = "test-data/kiv2_6.fasta";
 		String codonTableFilename = "codon_table.csv";
 
 		Map<String, String> codonTable = SequenceUtil.loadCodonTable(codonTableFilename);
