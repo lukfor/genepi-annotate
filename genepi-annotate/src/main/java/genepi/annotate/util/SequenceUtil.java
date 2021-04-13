@@ -15,6 +15,12 @@ public class SequenceUtil {
 	public static String readReferenceSequence(String filename) throws Exception {
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line = reader.readLine();
+
+		if (line == null) {
+			reader.close();
+			throw new Exception("Empty file");
+		}
+		
 		StringBuffer reference = new StringBuffer();
 
 		if (!line.contains(">")) {
@@ -24,10 +30,6 @@ public class SequenceUtil {
 
 		line = reader.readLine(); // read next line under sample name
 
-		if (line == null) {
-			reader.close();
-			throw new Exception("Empty file");
-		}
 		while (line != null) {
 			if (line.contains(">")) {
 				reader.close();
