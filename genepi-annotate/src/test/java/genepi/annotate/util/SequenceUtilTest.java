@@ -4,30 +4,12 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 import genepi.annotate.AnnotateTool;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * Unit test for simple App.
  */
 public class SequenceUtilTest extends TestCase {
-	/**
-	 * Create the test case
-	 *
-	 * @param testName
-	 *            name of the test case
-	 */
-	public SequenceUtilTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(SequenceUtilTest.class);
-	}
 
 	public void testGetTrippel() {
 
