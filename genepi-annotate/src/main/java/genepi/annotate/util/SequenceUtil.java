@@ -205,7 +205,22 @@ public class SequenceUtil {
 			int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
 			String codonRef = codonTable.get(tripelRef);
-			String codonMut = codonTable.get(tripelMut);
+			
+			String codonMut="?"; //for mixtures e.g. 22802S 
+
+			if(variant=="A" || variant=="C" || variant=="G" || variant=="T" )
+				codonMut = codonTable.get(tripelMut);
+	
+			else if (variant.toUpperCase()=="DEL")
+				codonMut = "-";
+			
+			else if (variant.toUpperCase()=="INS")
+				codonMut = "fs";
+			
+			else if (variant=="N")
+				return "";
+			
+				
 			if (!codonRef.equals(codonMut))
 				return (codonRef + posAAC + codonMut);
 		}
