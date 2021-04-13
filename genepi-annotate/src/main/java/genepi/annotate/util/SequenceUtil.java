@@ -20,7 +20,7 @@ public class SequenceUtil {
 			reader.close();
 			throw new Exception("Empty file");
 		}
-		
+
 		StringBuffer reference = new StringBuffer();
 
 		if (!line.contains(">")) {
@@ -110,11 +110,11 @@ public class SequenceUtil {
 	}
 
 	public static String getReverseComplement(String forwardTriple) {
-		
+
 		if (forwardTriple == null) {
 			return "";
 		}
-		
+
 		String result = "";
 		for (int i = forwardTriple.length() - 1; i >= 0; i--) {
 			switch (forwardTriple.charAt(i)) {
@@ -141,7 +141,7 @@ public class SequenceUtil {
 				break;
 			case 't':
 				result += "a";
-				break;				
+				break;
 			}
 		}
 		return result;
@@ -224,20 +224,19 @@ public class SequenceUtil {
 
 			String codonMut = "?"; // for mixtures e.g. 22802S
 
-			if (variant == "A" || variant == "C" || variant == "G" || variant == "T")
+			if (variant.equals("A") || variant.equals("C") || variant.equals("G") || variant.equals("T")) {
 				codonMut = codonTable.get(tripelMut);
-
-			else if (variant.toUpperCase() == "DEL")
+			} else if (variant.equalsIgnoreCase("DEL")) {
 				codonMut = "-";
-
-			else if (variant.toUpperCase() == "INS")
+			} else if (variant.equalsIgnoreCase("INS")) {
 				codonMut = "fs";
-
-			else if (variant == "N")
+			} else if (variant.equals("N")) {
 				return "";
+			}
 
-			if (!codonRef.equals(codonMut))
+			if (!codonRef.equals(codonMut)) {
 				return (codonRef + posAAC + codonMut);
+			}
 		}
 		return "";
 
