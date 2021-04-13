@@ -1,20 +1,18 @@
 package genepi.annotate.util;
 
-import java.util.Iterator;
+import java.io.IOException;
 
 import genepi.io.table.reader.CsvTableReader;
 import htsjdk.samtools.util.IntervalTree;
-import htsjdk.samtools.util.IntervalTree.Node;
 
-public class MapLocus {
+public class MapLocus extends AbstractMapLocus{
 
-	private IntervalTree<MapLocusItem> intervalTree;
-
-	public MapLocus(String filename) {
-		intervalTree = loadFromFile(filename);
+	public MapLocus(String filename) throws IOException {
+		super(filename);
 	}
 
-	private IntervalTree<MapLocusItem> loadFromFile(String filename) {
+	@Override
+	protected IntervalTree<MapLocusItem> loadFromFile(String filename) {
 		IntervalTree<MapLocusItem> intervalTree = new IntervalTree<MapLocusItem>();
 		CsvTableReader reader = new CsvTableReader(filename, '\t');
 		while (reader.next()) {
@@ -34,11 +32,4 @@ public class MapLocus {
 		return intervalTree;
 	}
 	
-	public Iterator<Node<MapLocusItem>> findByRange(int start, int stop){
-		return intervalTree.overlappers(start, stop);
-	}
-	
-	public Iterator<Node<MapLocusItem>> findByPosition(int position){
-		return findByRange(position, position);
-	}
 }

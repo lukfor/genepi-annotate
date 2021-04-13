@@ -1,5 +1,6 @@
 package genepi.annotate.util;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import htsjdk.samtools.util.IntervalTree.Node;
@@ -28,7 +29,7 @@ public class MapLocusGFF3Test extends TestCase {
 		return new TestSuite(MapLocusGFF3Test.class);
 	}
 
-	public void testMapLocus() {
+	public void testLoadFromFile() throws IOException {
 
 		String filename = "test-data/SARSCOV2.gff";
 

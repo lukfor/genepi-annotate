@@ -1,5 +1,6 @@
 package genepi.annotate;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -65,7 +66,14 @@ public class AnnotateTool extends Tool {
 		Map<String, String> codonTable = SequenceUtil.loadCodonTable(CODON_TABLE_FILENAME);
 
 		System.out.println("Reading maplocus file " + maplocusFilename + "...");
-		MapLocus maplocus = new MapLocus(maplocusFilename);
+		MapLocus maplocus;
+		try {
+			maplocus = new MapLocus(maplocusFilename);
+		} catch (IOException e) {
+			System.out.println("Error loading MapLocus from file '" + maplocusFilename + "':");
+			e.printStackTrace();
+			return -1;
+		}
 
 		CsvTableReader reader = new CsvTableReader(input, '\t');
 		CsvTableWriter writer = new CsvTableWriter(output, '\t');

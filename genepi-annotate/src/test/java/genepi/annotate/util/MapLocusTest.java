@@ -1,5 +1,6 @@
 package genepi.annotate.util;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import htsjdk.samtools.util.IntervalTree.Node;
@@ -28,7 +29,7 @@ public class MapLocusTest extends TestCase {
 		return new TestSuite(MapLocusTest.class);
 	}
 
-	public void testMapLocus() {
+	public void testLoadFromFile() throws IOException {
 
 		String filename = "MapLocusLPA (FOR LONG PCR) - v3.txt";
 
