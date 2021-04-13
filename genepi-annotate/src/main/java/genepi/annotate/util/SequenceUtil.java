@@ -143,22 +143,19 @@ public class SequenceUtil {
 		return codonTable;
 	}
 
-	public static Map<String, String> loadCodonTableLong(String filename) {
+	public static Map<String, String> loadCodonTableLong(String filename) throws FileNotFoundException {
 		FileInputStream file;
 		HashMap<String, String> codonTable = new HashMap<String, String>();
-		try {
-			file = new FileInputStream(filename);
-			CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
-			while (reader.next()) {
-				String aminoAcid = reader.getString("Letter");
-				String codons = reader.getString("Codon");
-				codonTable.put(codons.trim(), aminoAcid);
-			}
-			reader.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		file = new FileInputStream(filename);
+		CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
+		while (reader.next()) {
+			String aminoAcid = reader.getString("Letter");
+			String codons = reader.getString("Codon");
+			codonTable.put(codons.trim(), aminoAcid);
 		}
+		reader.close();
+
 		return codonTable;
 	}
 
@@ -205,22 +202,21 @@ public class SequenceUtil {
 			int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
 			String codonRef = codonTable.get(tripelRef);
-			
-			String codonMut="?"; //for mixtures e.g. 22802S 
 
-			if(variant=="A" || variant=="C" || variant=="G" || variant=="T" )
+			String codonMut = "?"; // for mixtures e.g. 22802S
+
+			if (variant == "A" || variant == "C" || variant == "G" || variant == "T")
 				codonMut = codonTable.get(tripelMut);
-	
-			else if (variant.toUpperCase()=="DEL")
+
+			else if (variant.toUpperCase() == "DEL")
 				codonMut = "-";
-			
-			else if (variant.toUpperCase()=="INS")
+
+			else if (variant.toUpperCase() == "INS")
 				codonMut = "fs";
-			
-			else if (variant=="N")
+
+			else if (variant == "N")
 				return "";
-			
-				
+
 			if (!codonRef.equals(codonMut))
 				return (codonRef + posAAC + codonMut);
 		}

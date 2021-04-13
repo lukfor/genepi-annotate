@@ -1,5 +1,6 @@
 package genepi.annotate.util;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 import genepi.annotate.AnnotateTool;
@@ -130,7 +131,7 @@ public class SequenceUtilTest extends TestCase {
 
 	}
 	
-	public void testLoadCodonTableLong() {
+	public void testLoadCodonTableLong() throws FileNotFoundException {
 		Map<String, String> codonTable = SequenceUtil.loadCodonTableLong("test-data/SARSCOV2.aac.txt");
 		assertEquals("A", codonTable.get("GCT"));
 		assertEquals("A", codonTable.get("GCG"));
