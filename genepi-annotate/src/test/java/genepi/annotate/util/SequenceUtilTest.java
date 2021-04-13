@@ -71,7 +71,14 @@ public class SequenceUtilTest extends TestCase {
 		assertEquals("IJK", SequenceUtil.getTripel(sequence, 1, 1, 8));
 
 	}
-
+	
+	public void testGetReverseComplement() {
+		assertEquals("ggggaaaaaaaatttatatat",SequenceUtil.getReverseComplement("atatataaattttttttcccc"));
+		assertEquals("atatataaattttttttcccc",SequenceUtil.getReverseComplement("ggggaaaaaaaatttatatat"));
+		assertEquals("",SequenceUtil.getReverseComplement(""));
+		assertEquals("",SequenceUtil.getReverseComplement(null));
+	}
+	
 	public void testGetTripelWithMutation() {
 
 		String sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

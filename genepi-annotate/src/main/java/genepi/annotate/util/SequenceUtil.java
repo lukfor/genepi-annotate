@@ -109,7 +109,12 @@ public class SequenceUtil {
 
 	}
 
-	private static String getReverseComplement(String forwardTriple) {
+	public static String getReverseComplement(String forwardTriple) {
+		
+		if (forwardTriple == null) {
+			return "";
+		}
+		
 		String result = "";
 		for (int i = forwardTriple.length() - 1; i >= 0; i--) {
 			switch (forwardTriple.charAt(i)) {
@@ -125,6 +130,18 @@ public class SequenceUtil {
 			case 'T':
 				result += "A";
 				break;
+			case 'a':
+				result += "t";
+				break;
+			case 'c':
+				result += "g";
+				break;
+			case 'g':
+				result += "c";
+				break;
+			case 't':
+				result += "a";
+				break;				
 			}
 		}
 		return result;
