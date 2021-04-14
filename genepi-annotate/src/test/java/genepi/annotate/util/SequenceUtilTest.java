@@ -1,16 +1,17 @@
 package genepi.annotate.util;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.FileNotFoundException;
 import java.util.Map;
 
+import org.junit.Test;
+
 import genepi.annotate.AnnotateTool;
-import junit.framework.TestCase;
 
-/**
- * Unit test for simple App.
- */
-public class SequenceUtilTest extends TestCase {
+public class SequenceUtilTest {
 
+	@Test
 	public void testGetTrippel() {
 
 		String sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -71,14 +72,43 @@ public class SequenceUtilTest extends TestCase {
 		assertEquals("IJK", SequenceUtil.getTripel(sequence, 1, 1, 8));
 
 	}
-	
-	public void testGetReverseComplement() {
-		assertEquals("ggggaaaaaaaatttatatat",SequenceUtil.getReverseComplement("atatataaattttttttcccc"));
-		assertEquals("atatataaattttttttcccc",SequenceUtil.getReverseComplement("ggggaaaaaaaatttatatat"));
-		assertEquals("",SequenceUtil.getReverseComplement(""));
-		assertEquals("",SequenceUtil.getReverseComplement(null));
+
+	@Test
+	public void testGetTrippelRev() throws Exception {
+
+		String sequence = "ACGTTGACACGT";
+
+		assertEquals(SequenceUtil.getReverseComplement("ACG"), SequenceUtil.getTripelRev(sequence, 6, 0, 1));
+		assertEquals(SequenceUtil.getReverseComplement("ACG"), SequenceUtil.getTripelRev(sequence, 6, 0, 2));
+		assertEquals(SequenceUtil.getReverseComplement("ACG"), SequenceUtil.getTripelRev(sequence, 6, 0, 3));
+		assertEquals(SequenceUtil.getReverseComplement("TTG"), SequenceUtil.getTripelRev(sequence, 6, 0, 4));
+		assertEquals(SequenceUtil.getReverseComplement("TTG"), SequenceUtil.getTripelRev(sequence, 6, 0, 5));
+		assertEquals(SequenceUtil.getReverseComplement("TTG"), SequenceUtil.getTripelRev(sequence, 6, 0, 6));
+
+		assertEquals(SequenceUtil.getReverseComplement("CGT"), SequenceUtil.getTripelRev(sequence, 7, 0, 2));
+		assertEquals(SequenceUtil.getReverseComplement("CGT"), SequenceUtil.getTripelRev(sequence, 7, 0, 3));
+		assertEquals(SequenceUtil.getReverseComplement("CGT"), SequenceUtil.getTripelRev(sequence, 7, 0, 4));
+
+		// TODO: add test for offset and SequenceUtil.getTripelRev(sequence, 7, 0, 1)
+		// fails. "-" expected
+
 	}
-	
+
+	@Test
+	public void testGetReverseComplement() throws Exception {
+		assertEquals("ggggaaaaaaaatttatatat", SequenceUtil.getReverseComplement("atatataaattttttttcccc"));
+		assertEquals("atatataaattttttttcccc", SequenceUtil.getReverseComplement("ggggaaaaaaaatttatatat"));
+		assertEquals("atatataaattttttttccNc", SequenceUtil.getReverseComplement("gNggaaaaaaaatttatatat"));
+		assertEquals("", SequenceUtil.getReverseComplement(""));
+		assertEquals("", SequenceUtil.getReverseComplement(null));
+	}
+
+	@Test(expected = Exception.class)
+	public void testGetReverseComplementWithIllegalCharacter() throws Exception {
+		SequenceUtil.getReverseComplement("atatataatttttttXtcccc");
+	}
+
+	@Test
 	public void testGetTripelWithMutation() {
 
 		String sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -109,6 +139,7 @@ public class SequenceUtilTest extends TestCase {
 
 	}
 
+	@Test
 	public void testLoadCodonTable() {
 		Map<String, String> codonTable = SequenceUtil.loadCodonTable(AnnotateTool.CODON_TABLE_FILENAME);
 
@@ -120,6 +151,7 @@ public class SequenceUtilTest extends TestCase {
 
 	}
 
+	@Test
 	public void testLoadCodonTableLong() throws FileNotFoundException {
 		Map<String, String> codonTable = SequenceUtil.loadCodonTableLong("test-data/SARSCOV2.aac.txt");
 		assertEquals("A", codonTable.get("GCT"));
@@ -130,12 +162,13 @@ public class SequenceUtilTest extends TestCase {
 
 	}
 
+	@Test
 	public void testgetTripleReference() throws Exception {
 
 		String reference = "test-data/SARSCOV2.fasta";
 
 		String refSequence = SequenceUtil.readReferenceSequence(reference);
-		System.out.println(refSequence.length());
+		assertEquals(29903, refSequence.length());
 		assertEquals("AAT", SequenceUtil.getTripelZeroBased(refSequence, 21563, 0, 23063));
 
 	}

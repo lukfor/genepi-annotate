@@ -78,7 +78,7 @@ public class SequenceUtil {
 		return temp.toString();
 	}
 
-	public static String getTripelRev(String refSequence, int stopExon, int offset, int position) {
+	public static String getTripelRev(String refSequence, int stopExon, int offset, int position) throws Exception {
 
 		int lastBase = stopExon - offset;
 		if (position > lastBase) {
@@ -94,7 +94,7 @@ public class SequenceUtil {
 	}
 
 	public static String getTripelWithMutationRev(String refSequence, int stopExon, int offset, int position,
-			String variant) {
+			String variant) throws Exception {
 
 		int lastBase = stopExon - offset;
 		if (position > lastBase) {
@@ -109,7 +109,7 @@ public class SequenceUtil {
 
 	}
 
-	public static String getReverseComplement(String forwardTriple) {
+	public static String getReverseComplement(String forwardTriple) throws Exception {
 
 		if (forwardTriple == null) {
 			return "";
@@ -130,6 +130,9 @@ public class SequenceUtil {
 			case 'T':
 				result += "A";
 				break;
+			case 'N':
+				result += "N";
+				break;
 			case 'a':
 				result += "t";
 				break;
@@ -142,6 +145,11 @@ public class SequenceUtil {
 			case 't':
 				result += "a";
 				break;
+			case 'n':
+				result += "n";
+				break;
+			default:
+				throw new Exception("Illegal character " + forwardTriple.charAt(i));
 			}
 		}
 		return result;
@@ -197,7 +205,7 @@ public class SequenceUtil {
 	}
 
 	public static String getAAC(String refSequence, Map<String, String> codonTable, MapLocusItem item, int position,
-			String variant) {
+			String variant) throws Exception {
 
 		if (item != null) {
 

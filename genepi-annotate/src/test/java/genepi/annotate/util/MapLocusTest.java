@@ -1,16 +1,17 @@
 package genepi.annotate.util;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.junit.Test;
+
 import htsjdk.samtools.util.IntervalTree.Node;
-import junit.framework.TestCase;
 
-/**
- * Unit test for simple App.
- */
-public class MapLocusTest extends TestCase {
+public class MapLocusTest {
 
+	@Test
 	public void testLoadFromFile() throws IOException {
 
 		String filename = "test-data/MapLocusLPA (FOR LONG PCR) - v3.txt";
