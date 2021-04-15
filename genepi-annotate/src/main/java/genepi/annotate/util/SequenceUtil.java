@@ -84,12 +84,17 @@ public class SequenceUtil {
 		if (position > lastBase) {
 			return "-";
 		}
+		
 		int difference = lastBase - position;
 		int relativeOffset = difference % 3;
 		int end = position + relativeOffset;
 		if (end >= refSequence.length()) {
 			return "-";
 		}
+		if (end-3<0) {
+			return "-";
+		}
+		
 		return getReverseComplement(refSequence.substring(end - 3, end));
 	}
 

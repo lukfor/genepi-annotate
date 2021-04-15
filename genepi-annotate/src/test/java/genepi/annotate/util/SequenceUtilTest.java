@@ -89,8 +89,12 @@ public class SequenceUtilTest {
 		assertEquals(SequenceUtil.getReverseComplement("CGT"), SequenceUtil.getTripelRev(sequence, 7, 0, 3));
 		assertEquals(SequenceUtil.getReverseComplement("CGT"), SequenceUtil.getTripelRev(sequence, 7, 0, 4));
 
-		// TODO: add test for offset and SequenceUtil.getTripelRev(sequence, 7, 0, 1)
-		// fails. "-" expected
+		assertEquals("-", SequenceUtil.getTripelRev(sequence, 7, 0, 1));
+		assertEquals("-", SequenceUtil.getTripelRev(sequence, 6, 0, 7));
+		
+		assertEquals(SequenceUtil.getReverseComplement("GTT"), SequenceUtil.getTripelRev(sequence, 6, 1, 3));
+		assertEquals(SequenceUtil.getReverseComplement("CGT"), SequenceUtil.getTripelRev(sequence, 6, 2, 3));
+		assertEquals(SequenceUtil.getReverseComplement("ACG"), SequenceUtil.getTripelRev(sequence, 6, 3, 3));
 
 	}
 
