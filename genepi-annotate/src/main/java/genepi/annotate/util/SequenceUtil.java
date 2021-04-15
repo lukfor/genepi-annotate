@@ -15,6 +15,12 @@ public class SequenceUtil {
 	public static String readReferenceSequence(String filename) throws Exception {
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line = reader.readLine();
+
+		if (line == null) {
+			reader.close();
+			throw new Exception("Empty file");
+		}
+
 		StringBuffer reference = new StringBuffer();
 
 		if (!line.contains(">")) {
@@ -24,10 +30,6 @@ public class SequenceUtil {
 
 		line = reader.readLine(); // read next line under sample name
 
-		if (line == null) {
-			reader.close();
-			throw new Exception("Empty file");
-		}
 		while (line != null) {
 			if (line.contains(">")) {
 				reader.close();
@@ -76,7 +78,7 @@ public class SequenceUtil {
 		return temp.toString();
 	}
 
-	public static String getTripelRev(String refSequence, int stopExon, int offset, int position) {
+	public static String getTripelRev(String refSequence, int stopExon, int offset, int position) throws Exception {
 
 		int lastBase = stopExon - offset;
 		if (position > lastBase) {
@@ -92,7 +94,7 @@ public class SequenceUtil {
 	}
 
 	public static String getTripelWithMutationRev(String refSequence, int stopExon, int offset, int position,
-			String variant) {
+			String variant) throws Exception {
 
 		int lastBase = stopExon - offset;
 		if (position > lastBase) {
@@ -107,7 +109,12 @@ public class SequenceUtil {
 
 	}
 
-	private static String getReverseComplement(String forwardTriple) {
+	public static String getReverseComplement(String forwardTriple) throws Exception {
+
+		if (forwardTriple == null) {
+			return "";
+		}
+
 		String result = "";
 		for (int i = forwardTriple.length() - 1; i >= 0; i--) {
 			switch (forwardTriple.charAt(i)) {
@@ -123,6 +130,26 @@ public class SequenceUtil {
 			case 'T':
 				result += "A";
 				break;
+			case 'N':
+				result += "N";
+				break;
+			case 'a':
+				result += "t";
+				break;
+			case 'c':
+				result += "g";
+				break;
+			case 'g':
+				result += "c";
+				break;
+			case 't':
+				result += "a";
+				break;
+			case 'n':
+				result += "n";
+				break;
+			default:
+				throw new Exception("Illegal character " + forwardTriple.charAt(i));
 			}
 		}
 		return result;
@@ -143,22 +170,19 @@ public class SequenceUtil {
 		return codonTable;
 	}
 
-	public static Map<String, String> loadCodonTableLong(String filename) {
+	public static Map<String, String> loadCodonTableLong(String filename) throws FileNotFoundException {
 		FileInputStream file;
 		HashMap<String, String> codonTable = new HashMap<String, String>();
-		try {
-			file = new FileInputStream(filename);
-			CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
-			while (reader.next()) {
-				String aminoAcid = reader.getString("Letter");
-				String codons = reader.getString("Codon");
-				codonTable.put(codons.trim(), aminoAcid);
-			}
-			reader.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		file = new FileInputStream(filename);
+		CsvTableReader reader = new CsvTableReader(new DataInputStream(file), '\t');
+		while (reader.next()) {
+			String aminoAcid = reader.getString("Letter");
+			String codons = reader.getString("Codon");
+			codonTable.put(codons.trim(), aminoAcid);
 		}
+		reader.close();
+
 		return codonTable;
 	}
 
@@ -181,7 +205,7 @@ public class SequenceUtil {
 	}
 
 	public static String getAAC(String refSequence, Map<String, String> codonTable, MapLocusItem item, int position,
-			String variant) {
+			String variant) throws Exception {
 
 		if (item != null) {
 
@@ -205,24 +229,22 @@ public class SequenceUtil {
 			int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
 			String codonRef = codonTable.get(tripelRef);
-			
-			String codonMut="?"; //for mixtures e.g. 22802S 
 
-			if(variant=="A" || variant=="C" || variant=="G" || variant=="T" )
+			String codonMut = "?"; // for mixtures e.g. 22802S
+
+			if (variant.equals("A") || variant.equals("C") || variant.equals("G") || variant.equals("T")) {
 				codonMut = codonTable.get(tripelMut);
-	
-			else if (variant.toUpperCase()=="DEL")
+			} else if (variant.equalsIgnoreCase("DEL")) {
 				codonMut = "-";
-			
-			else if (variant.toUpperCase()=="INS")
+			} else if (variant.equalsIgnoreCase("INS")) {
 				codonMut = "fs";
-			
-			else if (variant=="N")
+			} else if (variant.equals("N")) {
 				return "";
-			
-				
-			if (!codonRef.equals(codonMut))
+			}
+
+			if (!codonRef.equals(codonMut)) {
 				return (codonRef + posAAC + codonMut);
+			}
 		}
 		return "";
 

@@ -1,37 +1,30 @@
 package genepi.annotate;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Iterator;
 import java.util.Map;
+
+import org.junit.Test;
 
 import genepi.annotate.util.MapLocus;
 import genepi.annotate.util.MapLocusGFF3;
 import genepi.annotate.util.MapLocusItem;
 import genepi.annotate.util.SequenceUtil;
 import htsjdk.samtools.util.IntervalTree.Node;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
-/**
- * Unit test for simple App.
- */
-public class AnnotateToolTest extends TestCase {
-	/**
-	 * Create the test case
-	 *
-	 * @param testName name of the test case
-	 */
-	public AnnotateToolTest(String testName) {
-		super(testName);
-	}
+public class AnnotateToolTest {
 
+	@Test
 	public void testOffsetExon421() throws Exception {
 
 		int position = 621;
 		position = position - 1;
 
-		String maplocusFilename = "MapLocusLPA (FOR LONG PCR) - v3.txt";
-		String reference = "kiv2_6.fasta";
+		String maplocusFilename = "test-data/MapLocusLPA (FOR LONG PCR) - v3.txt";
+		String reference = "test-data/kiv2_6.fasta";
 		String codonTableFilename = "codon_table.csv";
 
 		Map<String, String> codonTable = SequenceUtil.loadCodonTable(codonTableFilename);
@@ -48,19 +41,20 @@ public class AnnotateToolTest extends TestCase {
 		assertEquals(3, offset);
 
 		// get ref tripel
-		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart()-1, offset - 1, position);
+		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset - 1, position);
 
 		assertEquals("His", codonTable.get(tripelRef));
 
 	}
-
+	
+	@Test
 	public void testOffsetExon422() throws Exception {
 
 		int position = 4912;
 		position = position - 1;
 
-		String maplocusFilename = "MapLocusLPA (FOR LONG PCR) - v3.txt";
-		String reference = "kiv2_6.fasta";
+		String maplocusFilename = "test-data/MapLocusLPA (FOR LONG PCR) - v3.txt";
+		String reference = "test-data/kiv2_6.fasta";
 		String codonTableFilename = "codon_table.csv";
 
 		Map<String, String> codonTable = SequenceUtil.loadCodonTable(codonTableFilename);
@@ -77,12 +71,13 @@ public class AnnotateToolTest extends TestCase {
 		assertEquals(2, offset);
 
 		// get ref tripel
-		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() -1, offset - 1, position);
+		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset - 1, position);
 
 		assertEquals("Ala", codonTable.get(tripelRef));
 
 	}
 
+	@Test
 	public void testSARSCOV2() throws Exception {
 
 		// S:N501Y - A23063T
@@ -113,36 +108,37 @@ public class AnnotateToolTest extends TestCase {
 
 		// 23063T
 
-		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart()-1, offset, position-1);
-		String tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart()-1, offset, position-1, variant);
+		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset, position - 1);
+		String tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() - 1, offset, position - 1,
+				variant);
 		int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
 		assertEquals("N501Y", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
-		
+
 		String aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
-		assertEquals("N501Y",aac);
-		
+		assertEquals("N501Y", aac);
+
 		// 23064C
 		position++;
 
-		tripelRef = SequenceUtil.getTripel(refSequence, item.getStart()-1, offset, position-1);
-		tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart()-1, offset, position-1, "C");
+		tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset, position - 1);
+		tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() - 1, offset, position - 1, "C");
 		posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 		assertEquals("N501T", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
 
 		// 23065C
 		position++;
 
-		tripelRef = SequenceUtil.getTripel(refSequence, item.getStart()-1, offset, position-1);
-		tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart()-1, offset, position-1, "A");
+		tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset, position - 1);
+		tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() - 1, offset, position - 1, "A");
 		posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 		assertEquals("N501K", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
 
 		// 23066A
 
 		position++;
-		tripelRef = SequenceUtil.getTripel(refSequence, item.getStart()-1, offset, position-1);
-		tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart()-1, offset, position-1, "A");
+		tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset, position - 1);
+		tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() - 1, offset, position - 1, "A");
 		posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 		assertEquals("G502S", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
 
@@ -159,6 +155,7 @@ public class AnnotateToolTest extends TestCase {
 
 	}
 
+	@Test
 	public void testmtDNA() throws Exception {
 
 		String maplocusFilename = "test-data/RCRS.gff";
@@ -183,21 +180,22 @@ public class AnnotateToolTest extends TestCase {
 
 		assertEquals(0, offset);
 
-		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() -1 , offset, position -1);
-		String tripelRef0 = SequenceUtil.getTripelZeroBased(refSequence, item.getStart() , offset, position );
+		String tripelRef = SequenceUtil.getTripel(refSequence, item.getStart() - 1, offset, position - 1);
+		String tripelRef0 = SequenceUtil.getTripelZeroBased(refSequence, item.getStart(), offset, position);
 		assertEquals(tripelRef, tripelRef0);
-		
-		String tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() -1 , offset, position -1, variant);
+
+		String tripelMut = SequenceUtil.getTripelWithMutation(refSequence, item.getStart() - 1, offset, position - 1,
+				variant);
 		int posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
 		assertEquals("L499M", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
-		
+
 		String aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
 		assertEquals("L499M", aac);
 
 		// 14225T in ND6 -> Reverse strand
-		
-		position = 14225; //first position reverse
+
+		position = 14225; // first position reverse
 		variant = "T";
 		result = maplocus.findByPosition(position);
 		assertTrue(result.hasNext());
@@ -209,36 +207,29 @@ public class AnnotateToolTest extends TestCase {
 		tripelMut = SequenceUtil.getTripelWithMutationRev(refSequence, item.getStop(), offset, position, variant);
 		posAAC = SequenceUtil.getPosition(item.getStart(), item.getStop(), position, item.getTranslated());
 
-		assertEquals("R150H", codonTable.get(tripelRef) + posAAC +	 codonTable.get(tripelMut));
+		assertEquals("R150H", codonTable.get(tripelRef) + posAAC + codonTable.get(tripelMut));
 
-		position=14673;
-		variant="G";
+		position = 14673;
+		variant = "G";
 		result = maplocus.findByPosition(position);
-		item = result.next().getValue();		
+		item = result.next().getValue();
 		aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
 		assertEquals("M1L", aac);
 
-		position=14668; //not an AAC
-		variant="T";
+		position = 14668; // not an AAC
+		variant = "T";
 		result = maplocus.findByPosition(position);
-		item = result.next().getValue();		
+		item = result.next().getValue();
 		aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
 		assertEquals("", aac);
-		
-		position=14668;
-		variant="G";
+
+		position = 14668;
+		variant = "G";
 		result = maplocus.findByPosition(position);
-		item = result.next().getValue();		
+		item = result.next().getValue();
 		aac = SequenceUtil.getAAC(refSequence, codonTable, item, position, variant);
 		assertEquals("M2I", aac);
-		
-	}
 
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(AnnotateToolTest.class);
 	}
 
 }
