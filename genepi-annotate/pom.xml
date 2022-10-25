@@ -16,14 +16,21 @@
 	</properties>
 
 	<repositories>
-		<repository>
-			<id>genepi</id>
-			<url>https://raw.github.com/genepi/maven-repository/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
+	<repository>
+			<id>jfrog-genepi-maven</id>
+			<name>jfrog-genepi-maven</name>
+			<url>https://genepi.jfrog.io/artifactory/maven/</url>
 		</repository>
+		
+				<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>bintray</name>
+			<url>https://jcenter.bintray.com</url>
+		</repository>
+		
 	</repositories>
 
 	<distributionManagement>
@@ -120,7 +127,7 @@
 		<dependency>
 			<groupId>genepi</groupId>
 			<artifactId>genepi-io</artifactId>
-			<version>1.0.5</version>
+			<version>1.0.12</version>
 		</dependency>
 	</dependencies>
 
