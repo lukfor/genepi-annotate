@@ -10,7 +10,7 @@ public class App extends Toolbox {
 		super(command, args);
 	}
 
-	public static final String APP = "genomic-utils";
+	public static final String APP = "genepi-annotate";
 
 	public static final String VERSION = "0.1.0";
 
