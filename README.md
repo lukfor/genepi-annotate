@@ -12,7 +12,7 @@ Please download the file `genepi-annotate.jar` from the latest [release](https:/
 ## Usage
 
 ```
-java genepi-annotate.jar annotate --input <string> --mutation <string> --position <string> --output <string> --columnmut <string> --columnwt <string> --reference <string> --maplocus <string>
+java -jar genepi-annotate.jar annotate --input <string> --mutation <string> --position <string> --output <string> --columnmut <string> --columnwt <string> --reference <string> --maplocus <string>
 ```
 
 ## Parameters
@@ -44,7 +44,7 @@ java genepi-annotate.jar annotate --input <string> --mutation <string> --positio
 ## Example
 
 ```
-java genepi-annotate.jar annotate --input test-input.txt --position POS --mutation MUT --output test-output.txt --columnwt wt_aas --columnmut mut_aas --reference reference.fasta --maplocus maplocus.txt
+java -jar  genepi-annotate.jar annotate --input test-input.txt --position POS --mutation MUT --output test-output.txt --columnwt wt_aas --columnmut mut_aas --reference reference.fasta --maplocus maplocus.txt
 ```
 
 ## MapLocus File
