@@ -1,6 +1,14 @@
 # genepi-annotate
 > Annotate snp list with amino acids.
 
+## Requirements
+
+- min. Java 11 
+
+## Installation
+
+Please download the file `genepi-annotate.jar` from the latest [release](https://github.com/lukfor/genepi-annotate/releases).
+
 ## Usage
 
 ```
