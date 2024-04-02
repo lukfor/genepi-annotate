@@ -19,17 +19,30 @@ java genepi-annotate.jar annotate --columnmut <string> --columnwt <string> --inp
 
 ## Parameters
 
-```
-    --columnmut <string>   New column for wt aas in output file
-    --columnwt <string>    New column for wildtype aas in output file
-    --input <string>       Input csv file
-    --mutation <string>    Mutation column in input file
-    --offset <int>         Offset
-    --output <string>      Output csv file
-    --position <string>    Position column in input file
-    --maplocus <string>    MapLocus filename
-    --reference <string>   Reference fasta file
-```    
+### Input Options
+
+| Option             | Description                                |
+|--------------------|--------------------------------------------|
+| `--input <string>` | Input csv file                             |
+| `--mutation <string>` | Mutation column in input file           |
+| `--position <string>` | Position column in input file           |
+| `--offset <int>`   | Offset                                     |
+
+### Output Options
+
+| Option               | Description                                |
+|----------------------|--------------------------------------------|
+| `--columnmut <string>` | New column for wt aas in output file     |
+| `--columnwt <string>`  | New column for wildtype aas in output file |
+| `--output <string>`    | Output csv file                            |
+
+### Reference files
+
+| Option               | Description                                |
+|----------------------|--------------------------------------------|
+| `--maplocus <string>` | MapLocus filename                          |
+| `--reference <string>`| Reference fasta file                       |
+
 
 ## Example
 
