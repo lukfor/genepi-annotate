@@ -12,15 +12,7 @@ Please download the file `genepi-annotate.jar` from the latest [release](https:/
 ## Usage
 
 ```
-java genepi-annotate.jar annotate
-       --input <string> \
-       --mutation <string>  \
-       --position <string> \
-       --output <string> \
-       --columnmut <string> \
-       --columnwt <string> \
-       --reference <string> \
-       --maplocus <string>
+java genepi-annotate.jar annotate --input <string> --mutation <string> --position <string> --output <string> --columnmut <string> --columnwt <string> --reference <string> --maplocus <string>
 ```
 
 ## Parameters
@@ -41,7 +33,7 @@ java genepi-annotate.jar annotate
 | `--columnmut <string>` | New column for wt aas in output file     |
 | `--columnwt <string>`  | New column for wildtype aas in output file |
 
-### Reference files
+### Reference Files
 
 | Option               | Description                                |
 |----------------------|--------------------------------------------|
